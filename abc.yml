@@ -1,0 +1,26 @@
+---
+- name: create web image
+  hosts: localhost
+  tasks:
+    - name: pull the latest httpd image
+      docker_image:
+        name: image
+        build:
+          path: ./
+          dockerfile: /root/project123/Dockerfile
+        tag: latest
+        source: build
+        state: present
+      become: yes
+    - name: create container
+      docker_container:
+         name: httpd
+         image: image
+         state: started
+         restart_policy: always
+         ports:
+           - "80:85"
+      become: yes  
+        
+    
+
